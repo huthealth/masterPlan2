@@ -4,8 +4,9 @@ import com.huttels.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Setter
 @Getter
 @NoArgsConstructor
 public class UserSaveRequestDto {
