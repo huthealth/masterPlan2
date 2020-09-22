@@ -26,8 +26,8 @@
                         </div>
                         <h4>새로 오셨나요?</h4>
                         <h6 class="font-weight-light">쉽게 가입하여 많은 기능들을 누려보세요.</h6>
-                        <form autocomplete="off"  action="#"  th:action="@{/users}"
-                              th:object="${userDto}" method="post" class="m-t" role="form"
+                        <form autocomplete="off"  action="#"  th:action="@{/users/register}"
+                              th:object="${registerDto}" method="post" class="m-t" role="form"
                               data-toggle="validator">
 
                             <!--                            <div th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}" class="alert alert-danger">-->

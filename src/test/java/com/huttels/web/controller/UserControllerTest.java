@@ -3,6 +3,7 @@ package com.huttels.web.controller;
 import com.huttels.domain.user.User;
 import com.huttels.domain.user.UserRepository;
 import com.huttels.service.UserService;
+import com.huttels.web.dto.UserLoginRequestDto;
 import com.huttels.web.dto.UserSaveRequestDto;
 import org.junit.After;
 import org.junit.Test;
@@ -45,7 +46,7 @@ public class UserControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    UserService mockUserService;
+   UserService mockUserService;
 
     /*@Autowired
     private UserRepository userRepository;
@@ -62,7 +63,7 @@ public class UserControllerTest {
     public void registerForm() throws Exception {
 
         //when(mockUserService.toString()).thenReturn("a");
-        mockMvc.perform(get("/users"))
+        mockMvc.perform(get("/users/registerForm"))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -70,9 +71,24 @@ public class UserControllerTest {
     @Test
     public void register() throws Exception {
 
-        mockMvc.perform(post("/users"))
+        mockMvc.perform(post("/users/register"))
                 .andExpect(status().isOk())
                 .andDo(print());
+    }
+
+    @Test
+    public void loginForm() throws Exception {
+        mockMvc.perform(get("/users/loginForm"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void login() throws Exception {
+        when(mockUserService.checkUser(new UserLoginRequestDto())).thenReturn(true);
+        mockMvc.perform(post("/users/login"))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
 }
