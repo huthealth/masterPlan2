@@ -88,7 +88,7 @@
     <div class="layer" style="background-color: rgba( 0, 0, 0, 0.5);">
         <nav id="siteNav" class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row" role="navigation">
             <div class="navbar-header">
-                <a class="navbar-brand brand-logo" href="/"><img src="/images/mpp.png" width="119"
+                <a class="navbar-brand brand-logo" href="/"><img src="/images/mppLogo.png" width="119"
                                                                        height="42"
                                                                        alt="logo"
                                                                        style="margin-left: 20px;"></a>
@@ -103,12 +103,12 @@
             <div class="col grid-margin">
                 <div class="content">
                     <div class="text-white">
-                        <span><h1>반갑습니다, <td th:text="${user.name}"></td>님</h1></span>
+                        <span><h1>반갑습니다, <td th:text="${nickName}"></td>님</h1></span>
                         <p><h5>프로젝트를 관리하세요.</h5></p>
                         <br>
                     </div>
                     <button class="btn btn-lg btn-rounded btn-outline-warning btn-icon-text" type="button"
-                            style="text-align: right" onclick="location.href='/project/write'">
+                            style="text-align: right" onclick="location.href='/projects/create'">
                         <span class="mdi mdi-note-plus btn-icon-prepend"></span>
                         생성
                     </button>
@@ -134,19 +134,19 @@
                                     <!--                            </tr>-->
                                     <!--                            </thead>-->
                                     <tbody>
-                                    <tr th:if="${#lists.size(list)} > 0" th:each="list : ${list}">
+                                    <tr th:if="${#lists.size(projects)} > 0" th:each="project : ${projects}">
 
-                                        <td class="title"><a href="/project/" th:attrappend="href=${list.projectidx}"
-                                                             th:text="${list.title}"></a></td>
+                                        <td class="title"><a th:href="@{{nickName}/projects/{id} (nickName=${nickName}, id = ${project.getId()}) }"
+                                                             th:text="${project.getTitle()}"></a></td>
                                         <td>
                                             <button class="btn btn-rounded btn-outline-info" type="button"
                                                     style="text-align: right">
-                                                <a th:href="@{/project/{projectidx}/findProjectMember(projectidx=${list.projectidx})}">
+                                                <a th:href="@{/project/{projectidx}/findProjectMember(projectidx=${project.getId()})}"></a>
                                                     <span class="mdi mdi-account-plus"></span>
                                             </button>
                                         </td>
                                     </tr>
-                                    <tr th:unless="${#lists.size(list)} > 0">
+                                    <tr th:unless="${#lists.size(projects)} > 0">
                                         <td colspan="4">조회된 결과가 없습니다.</td>
                                     </tbody>
                                 </table>

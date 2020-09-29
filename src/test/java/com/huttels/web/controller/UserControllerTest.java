@@ -85,7 +85,7 @@ public class UserControllerTest {
 
     @Test
     public void login() throws Exception {
-        when(mockUserService.checkUser(new UserLoginRequestDto())).thenReturn(true);
+        when(mockUserService.checkUser(new UserLoginRequestDto())).thenReturn(false);
         mockMvc.perform(post("/users/login"))
                 .andDo(print())
                 .andExpect(status().isOk());

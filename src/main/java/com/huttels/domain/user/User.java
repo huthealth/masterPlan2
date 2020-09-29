@@ -1,10 +1,15 @@
 package com.huttels.domain.user;
 
+import com.huttels.domain.project.Project;
+import com.huttels.domain.userProject.UserProject;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -13,10 +18,11 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "userId")
     private Long id;
 
     @Column(nullable = false)
-    private String userId;
+    private String nickName;
 
     @Column(nullable = false)
     private String password;
@@ -24,11 +30,13 @@ public class User {
     @Column(nullable = false)
     private String email;
 
+
     @Builder
-    public User(String userId, String password, String email) {
-        this.userId = userId;
+    public User(String nickName, String password, String email) {
+        this.nickName = nickName;
         this.password = password;
         this.email = email;
     }
+
 
 }

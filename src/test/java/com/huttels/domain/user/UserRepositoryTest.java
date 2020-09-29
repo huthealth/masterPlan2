@@ -1,5 +1,6 @@
 package com.huttels.domain.user;
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,17 +44,27 @@ public class UserRepositoryTest {
 
     }
 
+/*
+    @After
+    public void tearDown() throws Exception {
+        userRepository.deleteAll();
+    }
+*/
+
+
     @Test
     public void create(){
-        //User user = new User("lck","123","billy@naver.com");
-        //User newUser = userRepository.save(user);
-        //assertEquals(newUser.getUserId(),"lck");
+        User user = new User("lck","123","billy@naver.com");
+        User newUser = userRepository.save(user);
+        assertEquals(newUser.getId(),"lck");
     }
 
     @Test
     public void query(){
-        User foundUser = userRepository.findByUserId("lck");
-        assertEquals(foundUser.getUserId(),"lck");
+        User user = new User("lck","123","billy@naver.com");
+        User newUser = userRepository.save(user);
+        User foundUser = userRepository.findByNickName("lck");
+        assertEquals(foundUser.getId(),"lck");
     }
 
 }

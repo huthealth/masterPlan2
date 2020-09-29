@@ -22,17 +22,21 @@ public class UserService {
 
     @Transactional
     public String save(UserSaveRequestDto requestDto) {
-        return userRepository.save(requestDto.toEntity()).getUserId();
+        return userRepository.save(requestDto.toEntity()).getNickName();
     }
 
     @Transactional
     public boolean checkUser(UserLoginRequestDto loginDto) {
-        User user = userRepository.findByUserId(loginDto.getUserId());
+        User user = userRepository.findByNickName(loginDto.getNickName());
         if(user == null) return false;
         if(!user.getPassword().equals(loginDto.getPassword())) return false;
 
         HttpSession httpSession = httpServletRequest.getSession();
-        httpSession.setAttribute("user",loginDto.getUserId());
+        httpSession.setAttribute("nickName",loginDto.getNickName());
         return true;
+    }
+
+    public Long findUserId(String nickName) {
+        return userRepository.findByNickName(nickName).getId();
     }
 }
