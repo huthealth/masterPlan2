@@ -21,6 +21,10 @@ public class ProjectDto {
         this.content = content;
     }
 
+    public Project toEntity(){
+        return new Project(this.title,this.content);
+    }
+
     public static ProjectDto fromEntity(Project project){
         return new ProjectDto(project.getId(),project.getTitle(), project.getContent());
     }

@@ -107,11 +107,12 @@
                         <p><h5>프로젝트를 관리하세요.</h5></p>
                         <br>
                     </div>
-                    <button class="btn btn-lg btn-rounded btn-outline-warning btn-icon-text" type="button"
-                            style="text-align: right" onclick="location.href='/projects/create'">
+                    <button onclick="location.href='/projects/projectForm'" class="btn btn-lg btn-rounded btn-outline-warning btn-icon-text" type="button"
+                            style="text-align: right" >
                         <span class="mdi mdi-note-plus btn-icon-prepend"></span>
                         생성
                     </button>
+
                 </div>
             </div>
         </div>
@@ -136,7 +137,7 @@
                                     <tbody>
                                     <tr th:if="${#lists.size(projects)} > 0" th:each="project : ${projects}">
 
-                                        <td class="title"><a th:href="@{{nickName}/projects/{id} (nickName=${nickName}, id = ${project.getId()}) }"
+                                        <td class="title"><a th:href="@{projects/{id}( id = ${project.getId()}) }"
                                                              th:text="${project.getTitle()}"></a></td>
                                         <td>
                                             <button class="btn btn-rounded btn-outline-info" type="button"

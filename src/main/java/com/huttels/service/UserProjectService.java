@@ -19,6 +19,7 @@ public class UserProjectService {
 
     private final UserProjectRepository userProjectRepository;
 
+    private final UserService userService;
 
 
     public List<ProjectDto> findAllProjectsByNickName(Long userId){
@@ -29,5 +30,17 @@ public class UserProjectService {
             projectDtos.add(ProjectDto.fromEntity(userProject.getProject()));
         }
         return projectDtos;
+    }
+
+    public void save(UserProject userProject) {
+        userProjectRepository.save(userProject);
+    }
+
+    public boolean isMatched(String userNickName, Long projectId) {
+        List<UserProject>  userProjects = userProjectRepository.findAllByUserId(userService.findUserId(userNickName));
+        for(UserProject userProject : userProjects){
+            if(userProject.getProject().getId().equals(projectId)) return true;
+        }
+        return false;
     }
 }

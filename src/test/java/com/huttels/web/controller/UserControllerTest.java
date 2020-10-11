@@ -74,6 +74,7 @@ public class UserControllerTest {
         mockMvc.perform(post("/users/register"))
                 .andExpect(status().isOk())
                 .andDo(print());
+
     }
 
     @Test
@@ -85,7 +86,7 @@ public class UserControllerTest {
 
     @Test
     public void login() throws Exception {
-        when(mockUserService.checkUser(new UserLoginRequestDto())).thenReturn(false);
+        //when(mockUserService.checkUser(new UserLoginRequestDto())).thenReturn(false);
         mockMvc.perform(post("/users/login"))
                 .andDo(print())
                 .andExpect(status().isOk());

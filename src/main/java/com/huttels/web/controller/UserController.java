@@ -2,12 +2,14 @@ package com.huttels.web.controller;
 
 import com.huttels.domain.userProject.UserProject;
 import com.huttels.service.UserService;
+import com.huttels.utility.UserValidator;
 import com.huttels.web.dto.UserLoginRequestDto;
 import com.huttels.web.dto.UserSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,16 +25,24 @@ public class UserController {
 
     private final UserService userService;
 
+    private final UserValidator userValidator;
+
     @GetMapping("/users/registerForm")
     public String registerForm(Model model) {
-//        System.out.println("form");
-        model.addAttribute("registerDto", new UserSaveRequestDto());
+        model.addAttribute("userRegisterDto", new UserSaveRequestDto());
         return "user/registerForm";
     }
 
     @PostMapping("/users/register")
-    public String register(@ModelAttribute UserSaveRequestDto registerDto) {
-        userService.save(registerDto);
+    public String register(@ModelAttribute("userRegisterDto") UserSaveRequestDto userRegisterDto, BindingResult bindingResult) {
+
+        userValidator.validate(userRegisterDto,bindingResult);
+
+        if(bindingResult.hasErrors()) {
+            return "user/registerForm";
+        }
+
+        userService.save(userRegisterDto);
         return "index";
     }
 
@@ -43,9 +53,9 @@ public class UserController {
     }
 
     @PostMapping("/users/login")
-    public String login(@ModelAttribute UserLoginRequestDto loginDto, Model model) {
+    public String login(@ModelAttribute UserLoginRequestDto loginDto, Model model, HttpServletRequest httpServletRequest) {
 
-        if (!userService.checkUser(loginDto)) {
+        if (!userService.login(httpServletRequest.getSession(),loginDto)) {
             return "index";
         }
 

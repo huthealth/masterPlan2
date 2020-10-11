@@ -29,7 +29,7 @@ public class UserProjectRepositoryTest {
 
     @Test
     public void findAllByUserId() {
-        User user = User.builder().nickName("billy104").password("save").email("lk@lk").build();
+        User user = User.builder().nickName("billy104").password("save").build();
         userRepository.save(user);
 
         Project project1 = Project.builder().title("A").content("AA").build();

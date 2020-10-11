@@ -54,14 +54,14 @@ public class UserRepositoryTest {
 
     @Test
     public void create(){
-        User user = new User("lck","123","billy@naver.com");
+        User user = new User("lck","123");
         User newUser = userRepository.save(user);
         assertEquals(newUser.getId(),"lck");
     }
 
     @Test
     public void query(){
-        User user = new User("lck","123","billy@naver.com");
+        User user = new User("lck","123");
         User newUser = userRepository.save(user);
         User foundUser = userRepository.findByNickName("lck");
         assertEquals(foundUser.getId(),"lck");

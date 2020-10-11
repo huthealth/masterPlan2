@@ -23,9 +23,8 @@ public class UserSaveRequestDto {
         this.nickName = nickName;
         this.password = password;
         this.passwordConfirm = passwordConfirm;
-        this.email = email;
     }
 
-    public User toEntity() {return User.builder().nickName(nickName).password(password).email(email).build();}
+    public User toEntity() {return User.builder().nickName(nickName).password(password).build();}
 
 }

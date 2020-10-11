@@ -23,7 +23,7 @@ public class Project {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    //@Column(nullable = false)
     private String content;
 
     @Column(nullable = false)
