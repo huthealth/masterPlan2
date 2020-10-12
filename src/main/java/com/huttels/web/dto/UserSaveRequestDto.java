@@ -16,10 +16,8 @@ public class UserSaveRequestDto {
 
     private String passwordConfirm;
 
-    private String email;
-
     @Builder
-    public UserSaveRequestDto(String nickName, String password,String passwordConfirm, String email) {
+    public UserSaveRequestDto(String nickName, String password,String passwordConfirm) {
         this.nickName = nickName;
         this.password = password;
         this.passwordConfirm = passwordConfirm;

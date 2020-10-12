@@ -27,12 +27,16 @@ public class Project {
     private String content;
 
     @Column(nullable = false)
-    private Integer state;
+    private ProjectState state;
 
     @Builder
     public Project(String title, String content) {
         this.title = title;
         this.content = content;
-        this.state = 0;
+        this.state = ProjectState.BACKLOG;
+    }
+
+    public void changeState(ProjectState projectState) {
+        this.state = projectState;
     }
 }

@@ -33,5 +33,7 @@ public class User {
         this.password = password;
     }
 
-
+    public void hashPassword(String hashpw) {
+        password = hashpw;
+    }
 }

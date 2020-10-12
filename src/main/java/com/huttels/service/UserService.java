@@ -19,12 +19,12 @@ public class UserService {
 
 
     @Transactional
-    public String save(UserSaveRequestDto requestDto) {
+    public String save(UserSaveRequestDto userSaveRequestDto) {
 
-        BCrypt.hashpw(requestDto.getPassword(), BCrypt.gensalt());
-        requestDto.setPassword(BCrypt.hashpw(requestDto.getPassword(), BCrypt.gensalt()));
+        BCrypt.hashpw(userSaveRequestDto.getPassword(), BCrypt.gensalt());
+        userSaveRequestDto.setPassword(BCrypt.hashpw(userSaveRequestDto.getPassword(), BCrypt.gensalt()));
 
-        return userRepository.save(requestDto.toEntity()).getNickName();
+        return userRepository.save(userSaveRequestDto.toEntity()).getNickName();
     }
 
     @Transactional
