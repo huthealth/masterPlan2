@@ -2,13 +2,19 @@ package com.huttels.web.controller;
 
 import com.huttels.domain.BackLog.Backlog;
 import com.huttels.domain.BackLog.BacklogRepository;
+import com.huttels.domain.Todo.Todo;
+import com.huttels.domain.Todo.TodoRepository;
 import com.huttels.domain.project.Project;
+import com.huttels.domain.project.ProjectRepository;
+import com.huttels.domain.project.ProjectState;
 import com.huttels.domain.user.User;
+import com.huttels.domain.userProject.UserProjectRepository;
 import com.huttels.service.BacklogService;
 import com.huttels.service.ProjectService;
 import com.huttels.service.UserService;
 import com.huttels.web.dto.ProjectDto;
 import com.huttels.web.dto.UserSaveRequestDto;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,6 +50,8 @@ public class SprintControllerTest {
     private TestRestTemplate restTemplate;
 
 
+
+
     @Autowired
     private BacklogService backlogService;
 
@@ -51,12 +59,22 @@ public class SprintControllerTest {
     private BacklogRepository backlogRepository;
 
     @Autowired
+    private ProjectRepository projectRepository;
+
+    @Autowired
+    private TodoRepository todoRepository;
+
+    @Autowired
+    private UserProjectRepository userProjectRepository;
+    @Autowired
     private ProjectService projectService;
 
     @Autowired
     private UserService userService;
 
     private Long projectId;
+
+    private Long backLogId;
 
     @Before
     public void saveUser(){
@@ -69,6 +87,16 @@ public class SprintControllerTest {
         ProjectDto projectDto = ProjectDto.builder().title("test").build();
         Long projectId = projectService.save("billy104",projectDto);
         this.projectId = projectId;
+    }
+
+    @After
+    public void deleteAll(){
+
+        userProjectRepository.deleteAll();
+        todoRepository.deleteAll();
+        backlogRepository.deleteAll();
+        projectRepository.deleteAll();
+
     }
 
     @Test
@@ -91,5 +119,78 @@ public class SprintControllerTest {
         }
 
     }
-    
+
+    @Test
+    public void saveTodos(){
+
+        Backlog backlog = Backlog.builder().title("backlog1").project(projectService.findById(projectId)).build();
+        Backlog backlog2 = Backlog.builder().title("backlog2").project(projectService.findById(projectId)).build();
+        backlogRepository.save(backlog);
+        backlogRepository.save(backlog2);
+
+
+
+
+        Map<String, List<List<String>>> requestData = new HashMap<>();
+        List<List<String>> todolist = new ArrayList<>();
+        todolist.add(new ArrayList<>());
+        todolist.add(new ArrayList<>());
+        todolist.get(0).add(Long.toString(backlog.getId()));
+        todolist.get(0).add("todo1");
+        todolist.get(1).add(Long.toString(backlog2.getId()));
+        todolist.get(1).add("todo2");
+
+        requestData.put("result",todolist);
+
+        String url  = "http://localhost:" + port + "/projects/+"+projectId+"/sprint/todos/5";
+
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, requestData, String.class);
+
+        ProjectState projectState =  projectService.findById(projectId).getState();
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isEqualTo("투두 저장 성공");
+        assertThat(projectState).isEqualTo(ProjectState.BOARD);
+        for (Todo todo : todoRepository.findAll()){
+            System.out.println("========================================"+todo.getContent());
+        }
+
+    }
+
+    @Test
+    public void failedToSaveTodos(){
+
+        Backlog backlog = Backlog.builder().title("backlog1").project(projectService.findById(projectId)).build();
+        Backlog backlog2 = Backlog.builder().title("backlog2").project(projectService.findById(projectId)).build();
+        backlogRepository.save(backlog);
+        backlogRepository.save(backlog2);
+
+
+
+
+        Map<String, List<List<String>>> requestData = new HashMap<>();
+        List<List<String>> todolist = new ArrayList<>();
+        todolist.add(new ArrayList<>());
+        todolist.add(new ArrayList<>());
+        todolist.add(new ArrayList<>());
+        todolist.get(0).add(Long.toString(backlog.getId()));
+        todolist.get(0).add("todo1");
+        todolist.get(1).add(Long.toString(backlog2.getId()));
+        todolist.get(1).add("todo2");
+        todolist.get(1).add(Long.toString(100));
+        todolist.get(1).add("todo3");
+
+        requestData.put("result",todolist);
+
+        String url  = "http://localhost:" + port + "/projects/+"+projectId+"/sprint/todos/5";
+
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, requestData, String.class);
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isEqualTo("투두 저장 실패");
+        assertThat(todoRepository.findAll()).isEqualTo(null);
+
+
+    }
+
 }

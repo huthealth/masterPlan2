@@ -34,4 +34,7 @@ public class Backlog extends BaseTimeEntity {
         this.state = BacklogState.TODO;
     }
 
+    public void changeState(BacklogState state) {
+        this.state = state;
+    }
 }

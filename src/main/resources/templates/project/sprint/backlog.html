@@ -97,20 +97,20 @@
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
             <ul class="nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="/project/" th:attrappend="href=${projectidx}">
+                    <a class="nav-link" href="/project/" th:attrappend="href=${projectId}">
                         <i class="mdi mdi-home menu-icon"></i>
                         <span class="menu-title">Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/sprint/" th:attrappend="href=${projectidx}">
+                    <a class="nav-link" href="/sprint/" th:attrappend="href=${projectId}">
                         <i class="mdi mdi-emoticon-tongue menu-icon"></i>
                         <span class="menu-title">스프린트</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/project/{projectidx}/board(projectidx=${projectidx})}">
+                    <a class="nav-link" th:href="@{/project/{projectidx}/board(projectidx=${projectId})}">
                         <i class="mdi mdi-view-headline menu-icon"></i>
                         <span class="menu-title">게시판</span>
                     </a>
@@ -210,7 +210,7 @@
                                             }
                                             // alert(JSON.stringify(obj));
                                             $.ajax({
-                                                url: window.location + "/backlogs",
+                                                url: window.location,
                                                 type: "POST",
                                                 contentType: "application/json",
                                                 data: JSON.stringify(obj),
@@ -218,7 +218,7 @@
                                                     console.log(data);
                                                     alert(data);
                                                     $('#add_backlog')[0].reset();
-                                                    //location.href = window.location;
+                                                    location.href = "http://localhost:8080/projects/"+projectId+"/sprint";
                                                 },
                                                 error: function (request, status, error) {
                                                     alert(request);
