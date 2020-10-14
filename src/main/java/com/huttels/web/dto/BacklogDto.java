@@ -5,8 +5,10 @@ import com.huttels.domain.BackLog.BacklogState;
 import com.sun.org.apache.xml.internal.dtm.ref.DTMAxisIterNodeList;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@NoArgsConstructor
 @Getter
 public class BacklogDto {
 

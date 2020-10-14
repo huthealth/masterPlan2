@@ -31,7 +31,6 @@ public class BacklogService {
             Backlog backlog = Backlog.builder().title(s).project(project).build();
             backlogRepository.save(backlog);
         }
-        projectService.changeState(projectId, ProjectState.TODO);
         return true;
     }
 
@@ -46,7 +45,7 @@ public class BacklogService {
     }
 
     @Transactional
-    public List<BacklogDto> findAllByProjectId(Long projectId) {
+    public List<BacklogDto> findAllDtoByProjectId(Long projectId) {
         List<Backlog> backlogs = backlogRepository.findAll();
         List<BacklogDto> backlogDtos = new ArrayList<>();
         for (Backlog backlog : backlogs) {
@@ -54,5 +53,10 @@ public class BacklogService {
             backlogDtos.add(backlogDto);
         }
         return backlogDtos;
+    }
+
+    @Transactional
+    public List<Backlog> findAllByProjectId(Long projectId) {
+        return backlogRepository.findAll();
     }
 }

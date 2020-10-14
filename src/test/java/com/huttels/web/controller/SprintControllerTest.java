@@ -150,7 +150,7 @@ public class SprintControllerTest {
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isEqualTo("투두 저장 성공");
-        assertThat(projectState).isEqualTo(ProjectState.BOARD);
+        assertThat(projectState).isEqualTo(ProjectState.SCRUMBOARD);
         for (Todo todo : todoRepository.findAll()){
             System.out.println("========================================"+todo.getContent());
         }

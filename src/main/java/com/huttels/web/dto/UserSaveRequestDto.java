@@ -6,8 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
+
 @Getter
+@Setter
 @NoArgsConstructor
 public class UserSaveRequestDto {
     private String nickName;
@@ -25,4 +26,7 @@ public class UserSaveRequestDto {
 
     public User toEntity() {return User.builder().nickName(nickName).password(password).build();}
 
+    public void setPassword(String hashpw) {
+        this.password = hashpw;
+    }
 }
