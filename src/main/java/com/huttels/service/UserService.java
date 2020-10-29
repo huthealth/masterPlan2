@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 public class UserService {
 
     private final UserRepository userRepository;
+    public static final String USER_SESSION_KEY = "user";
 
 
     @Transactional
@@ -34,18 +35,18 @@ public class UserService {
 
         if (!BCrypt.checkpw(loginDto.getPassword(),user.getPassword())) return false;
 
-        httpSession.setAttribute("nickName",user.getNickName());
+        httpSession.setAttribute(USER_SESSION_KEY,user.getNickName());
         return true;
     }
 
     public boolean checkLogin(HttpSession httpSession){
-        String loginUser = (String)httpSession.getAttribute("nickName");
+        String loginUser = (String)httpSession.getAttribute(USER_SESSION_KEY);
         if(loginUser == null ) return false;
         return true;
     }
 
     public String getNickName(HttpSession httpSession) {
-        return (String)httpSession.getAttribute("nickName");
+        return (String)httpSession.getAttribute(USER_SESSION_KEY);
     }
 
     public Long findUserId(String nickName) {

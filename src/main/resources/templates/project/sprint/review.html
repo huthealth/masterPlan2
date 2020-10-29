@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>스프린트 회고 | Master Plan</title>
+    <link rel="stylesheet" href="/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="/vendors/base/vendor.bundle.base.css">
+    <link rel="stylesheet" href="/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="shortcut icon" href="/images/mpSmallLogo.jpg"/>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/earlyaccess/nanumgothic.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/earlyaccess/jejuhallasan.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="//code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
+    <style type="text/css">
+        je {
+            /*font-family: Segoe Script;*/
+            font-family: 'Jeju Hallasan', serif;
+            font-size: 25px;
+            color: darkslategray;
+        }
+        na {
+            font-family: "Nanum Gothic", serif;
+            font-size: 20px;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <div th:replace="/project/fragments/menu :: menu"></div>
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                    <span>
+                                        <h2><div
+                                                class="mdi mdi-lightbulb-outline btn-icon-prepend font-weight-bold">&nbsp<strong>스프린트 회고</strong></div></h2>
+                                     <br>
+                                    <input type="button" name="submit" id="submit" class="btn btn-lg btn-success" value="저장" style="float: right"/>
+                                    <input type="hidden" id="projectId" name="projectId" th:value="${projectId}">
+                                    </span><h5 style="float: left;">이번 스프린트는 어땠나요?</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="overflow: auto">
+                    <div class="col-md-6 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body" style="height: 300px;">
+                                <na>
+                                    <div class="mdi mdi-border-color text-dark font-weight-bold" style="width: 600px;">
+                                        <span>&ensp;요약</span><br><br>
+                                        <textarea style="resize: none; width: 460px; height: 200px" id="contents" name="contents"></textarea>
+                                    </div>
+                                </na>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body" style="height: 300px;">
+                                <table class="table table-dark text-white" style="text-align: center">
+                                    <div class="text-dark font-weight-bold" style="text-align: center">
+                                        <na>Backlog</na></div>
+                                    <tbody>
+                                    <tr th:each="backlog : ${backlogs}">
+                                        <td th:text="${backlog.getTitle}"></td>
+                                        <td>
+                                            <input th:name="checkBox" th:value="${backlog.getId}"
+                                                   class="checkBox"
+                                                   type="checkbox">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body" style="height: 300px; text-align: center">
+                                <table class="table table-hover" style="float: left; width: 33%">
+                                    <thead>
+                                    <tr>
+                                        <td>
+                                            <je>To-do</je>
+                                        </td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="todo : ${todos}">
+                                        <td th:text="${todo.content}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-hover" style="float: left; width: 33%">
+                                    <thead>
+                                    <tr>
+                                        <td>
+                                            <je>Doing</je>
+                                        </td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="doing : ${doings}">
+                                        <td th:text="${doing.content}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-hover" style="float: left; width: 33%">
+                                    <thead>
+                                    <tr>
+                                        <td>
+                                            <je>Done</je>
+                                        </td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="done : ${dones}">
+                                        <td th:text="${done.content}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var projectId = $("#projectId").val();
+
+        $('#submit').click(function () {
+
+            var size = $("input[name='checkBox']:checked").length;
+            var backlogDone = new Array(size);
+            $("input[name='checkBox']:checked").each(function(i) {
+                var checkBox = $(this);
+                backlogDone[i] = checkBox.val();
+            });
+
+            var comment = $("#contents").val();
+            var textAry = [];
+            textAry.push(comment);
+            alert(comment);
+            alert(textAry);
+            var obj = {
+                resultBacklogDone:backlogDone,
+                resultText:textAry
+            }
+
+            alert(JSON.stringify(obj));
+            $.ajax({
+                url: window.location +"/save",
+                type: "POST",
+                contentType : "application/json",
+                data: JSON.stringify(obj),
+                success: function (data) {
+                    console.log(data);
+                    alert(data);
+                    if(data == "스프린트 종료") {
+                        location.href = "/project"
+                    }
+                    else {
+                        location.href = "/sprint_plan/" + sprintid
+                    }
+                },
+                error: function (request, status, error) {
+                    alert(request);
+                    console.log(request);
+                }
+            });
+        });
+    });
+</script>
+
+<script src="/vendors/base/vendor.bundle.base.js"></script>
+<script src="/vendors/chart.js/Chart.min.js"></script>
+<script src="/vendors/datatables.net/jquery.dataTables.js"></script>
+<script src="/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+<script src="/js/off-canvas.js"></script>
+<script src="/js/hoverable-collapse.js"></script>
+<script src="/js/template.js"></script>
+<script src="/js/dashboard.js"></script>
+<script src="/js/data-table.js"></script>
+<script src="/js/jquery.dataTables.js"></script>
+<script src="/js/dataTables.bootstrap4.js"></script>
+</body>
+
+</html>

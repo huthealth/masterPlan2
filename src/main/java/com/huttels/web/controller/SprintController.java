@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -49,9 +48,10 @@ public class SprintController {
         if(projectState == ProjectState.SCRUMBOARD){
             return "redirect:/projects/"+projectId+"/sprint/scrumBoard";
         }
-
-        return null;
-
+        if(projectState == ProjectState.REVIEW){
+            return "redirect:/projects/"+projectId+"/sprint/review";
+        }
+        else return null;
     }
 
 
@@ -84,7 +84,6 @@ public class SprintController {
         model.addAttribute("backlogs",backlogDtos);
 
         return "project/sprint/todo";
-
     }
 
     @GetMapping("/projects/{projectId}/sprint/scrumBoard")
@@ -100,7 +99,7 @@ public class SprintController {
         long leftDay = todoService.getLeftDay(projectId);
         if(leftDay < 0 ) {
             projectService.changeState(projectId,ProjectState.REVIEW);
-            return "redirect:/projects"+projectId+ "/sprint";
+            return "redirect:/projects/"+projectId+"/sprint/review";
         }
 
 
@@ -122,12 +121,47 @@ public class SprintController {
     }
 
 
+    @GetMapping("/projects/{projectId}/sprint/scrumBoard/done")
+    public String scrumBoardToReview(@PathVariable("projectId") Long projectId, Model model,HttpServletRequest httpServletRequest ) {
+        HttpSession httpSession = httpServletRequest.getSession();
+        if (!userService.checkLogin(httpSession)) return "redirect:/users/loginForm";
+        String userNickName = userService.getNickName(httpSession);
+        //프로젝트와 유저가 일치하는지 확인
+        if (!userProjectService.isMatched(userNickName, projectId)) return "redirect:/projects";
+        projectService.changeState(projectId,ProjectState.REVIEW);
+        return "redirect:/projects/"+projectId+"/sprint/review";
+    }
+
+    @GetMapping("/projects/{projectId}/sprint/review")
+    public String review(@PathVariable("projectId") Long projectId, Model model,HttpServletRequest httpServletRequest ) {
+        HttpSession httpSession = httpServletRequest.getSession();
+        if (!userService.checkLogin(httpSession)) return "redirect:/users/loginForm";
+        String userNickName = userService.getNickName(httpSession);
+        //프로젝트와 유저가 일치하는지 확인
+        if (!userProjectService.isMatched(userNickName, projectId)) return "redirect:/projects";
+
+        Map<String,List<TodoDto>> todoMap = todoService.findAllByProjectId(projectId);
+
+        List<TodoDto> todos = todoMap.get("todos");
+        List<TodoDto> doings = todoMap.get("doings");
+        List<TodoDto> dones = todoMap.get("dones");
+
+        model.addAttribute("backlogProgress", 0);
+        model.addAttribute("userName", userNickName);
+        model.addAttribute("todos",todos);
+        model.addAttribute("doings",doings);
+        model.addAttribute("dones",dones);
+
+        return "project/sprint/review";
+    }
+
+
 
     @PostMapping("/projects/{projectId}/sprint/backlog")
     @ResponseBody
     public String saveBacklogs(@RequestBody Map<String, List<String>> requestData, @PathVariable Long projectId) {
-        List<String> backlogs= requestData.get("result");
-        if(!backlogService.saveAll(backlogs,projectId)){
+        List<String> backlogs = requestData.get("result");
+        if (!backlogService.saveAll(backlogs, projectId)) {
             return "백로그 저장 실패";
         }
         projectService.changeState(projectId, ProjectState.TODO);

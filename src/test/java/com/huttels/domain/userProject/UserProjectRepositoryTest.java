@@ -1,9 +1,11 @@
 package com.huttels.domain.userProject;
 
+import ch.qos.logback.classic.sift.AppenderFactoryUsingJoran;
 import com.huttels.domain.project.Project;
 import com.huttels.domain.project.ProjectRepository;
 import com.huttels.domain.user.User;
 import com.huttels.domain.user.UserRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,11 +50,40 @@ public class UserProjectRepositoryTest {
         userProjectRepository.save(userProject2);
         userProjectRepository.save(userProject3);
 
-        List<UserProject> list = userProjectRepository.findAllByUserId(user.getId());
+        List<UserProject> list = userProjectRepository.findByUserId(user.getId());
         for(UserProject up : list) {
             System.out.print(up.getProject().getTitle()+" ");
             System.out.println(up.getUser().getId());
         }
     }
+
+    @Test
+    public void findByProject(){
+        User user = User.builder().nickName("billy104").password("save").build();
+        userRepository.save(user);
+
+        Project project1 = Project.builder().title("A").content("AA").build();
+        Project project2 = Project.builder().title("B").content("BB").build();
+        Project project3 = Project.builder().title("C").content("CC").build();
+
+        projectRepository.save(project1);
+        projectRepository.save(project2);
+        projectRepository.save(project3);
+
+        UserProject userProject1 = UserProject.builder().user(user).project(project1).build();
+        UserProject userProject2 = UserProject.builder().user(user).project(project2).build();
+        UserProject userProject3 = UserProject.builder().user(user).project(project3).build();
+
+        userProjectRepository.save(userProject1);
+        userProjectRepository.save(userProject2);
+        userProjectRepository.save(userProject3);
+
+        List<UserProject> userProjects = userProjectRepository.findByProject(project1);
+        for(UserProject userProject : userProjects){
+            Assertions.assertThat(userProject.getProject()).isSameAs(project1);
+        }
+
+    }
+
 
 }

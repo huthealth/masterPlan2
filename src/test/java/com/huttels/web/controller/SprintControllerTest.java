@@ -11,6 +11,7 @@ import com.huttels.domain.user.User;
 import com.huttels.domain.userProject.UserProjectRepository;
 import com.huttels.service.BacklogService;
 import com.huttels.service.ProjectService;
+import com.huttels.service.UserProjectService;
 import com.huttels.service.UserService;
 import com.huttels.web.dto.ProjectDto;
 import com.huttels.web.dto.UserSaveRequestDto;
@@ -42,15 +43,11 @@ import static org.junit.Assert.*;
 
 public class SprintControllerTest {
 
-
     @LocalServerPort
     private int port;
 
     @Autowired
     private TestRestTemplate restTemplate;
-
-
-
 
     @Autowired
     private BacklogService backlogService;
@@ -70,6 +67,9 @@ public class SprintControllerTest {
     private ProjectService projectService;
 
     @Autowired
+    private UserProjectService  userProjectService;
+
+    @Autowired
     private UserService userService;
 
     private Long projectId;
@@ -85,7 +85,7 @@ public class SprintControllerTest {
     @Before
     public void saveProject(){
         ProjectDto projectDto = ProjectDto.builder().title("test").build();
-        Long projectId = projectService.save("billy104",projectDto);
+        Long projectId = userProjectService.saveProject("billy104",projectDto);
         this.projectId = projectId;
     }
 

@@ -27,6 +27,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -62,7 +63,7 @@ public class UserControllerTest {
     @Test
     public void registerForm() throws Exception {
 
-        //when(mockUserService.toString()).thenReturn("a");
+
         mockMvc.perform(get("/users/registerForm"))
                 .andExpect(status().isOk())
                 .andDo(print());

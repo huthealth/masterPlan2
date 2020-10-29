@@ -103,7 +103,7 @@
             <div class="col grid-margin">
                 <div class="content">
                     <div class="text-white">
-                        <span><h1>반갑습니다, <td th:text="${nickName}"></td>님</h1></span>
+                        <span><h1>반갑습니다, <td th:text="${userName}"></td>님</h1></span>
                         <p><h5>프로젝트를 관리하세요.</h5></p>
                         <br>
                     </div>
@@ -125,24 +125,15 @@
                         <div class="card-body" style="width: 700px; height: 270px;">
                             <div class="table-responsive">
                                 <table class="table table-hover" style="text-align: center;">
-                                    <!--                            <thead>-->
-                                    <!--                            <tr>-->
-                                    <!--                                <th></th>-->
-                                    <!--                                <th>프로젝트명</th>-->
-                                    <!--                                <th>과목</th>-->
-                                    <!--                                <th>마감 기한</th>-->
-                                    <!--                                <th>팀원 초대</th>-->
-                                    <!--                            </tr>-->
-                                    <!--                            </thead>-->
+
                                     <tbody>
                                     <tr th:if="${#lists.size(projects)} > 0" th:each="project : ${projects}">
 
-                                        <td class="title"><a th:href="@{projects/{id}( id = ${project.getId()}) }"
+                                        <td class="title"><a th:href="@{/projects/{id}( id = ${project.getId()}) }"
                                                              th:text="${project.getTitle()}"></a></td>
                                         <td>
                                             <button class="btn btn-rounded btn-outline-info" type="button"
-                                                    style="text-align: right">
-                                                <a th:href="@{/project/{projectidx}/findProjectMember(projectidx=${project.getId()})}"></a>
+                                                    style="text-align: right" th:onclick="'window.location.href = \'' + @{/projects/{projectId}/searchUser(projectId=${project.getId()})}+ '\''">
                                                     <span class="mdi mdi-account-plus"></span>
                                             </button>
                                         </td>

@@ -30,6 +30,7 @@ public class TodoService {
 
     @Transactional
     public void saveAll(List<List<String>> todos, String period) {
+
         Map<Long,Backlog> backlogMap = new HashMap<>();
 
         int periodNum = 0;
@@ -37,7 +38,7 @@ public class TodoService {
             periodNum = Integer.parseInt(period);
         }
         catch (NumberFormatException e){
-            throw new RuntimeException("period에 자연수를 넣어주세요.");
+            throw new NumberFormatException("period에 자연수를 넣어주세요.");
         }
 
         ZoneId seoul = ZoneId.of("Asia/Seoul");
@@ -62,6 +63,7 @@ public class TodoService {
 
     }
 
+    @Transactional
     public Map<String, List<TodoDto>> findAllByProjectId(Long projectId) {
         Map<String, List<TodoDto>> todoMap = new HashMap<>();
         List<Backlog> backlogs = backlogService.findAllByProjectId(projectId);
@@ -85,6 +87,7 @@ public class TodoService {
         return todoMap;
     }
 
+    @Transactional
     public List<Todo> findAllByBacklogId(Long backlogId){
         return todoRepository.findByBacklogId(backlogId);
     }
@@ -101,7 +104,7 @@ public class TodoService {
         }
     }
 
-
+    @Transactional
     public Todo findById(Long todoId){
         return todoRepository.findById(todoId).orElse(null);
     }

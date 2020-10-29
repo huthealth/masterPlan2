@@ -46,7 +46,7 @@ public class BacklogService {
 
     @Transactional
     public List<BacklogDto> findAllDtoByProjectId(Long projectId) {
-        List<Backlog> backlogs = backlogRepository.findAll();
+        List<Backlog> backlogs = backlogRepository.findByProjectId(projectId);
         List<BacklogDto> backlogDtos = new ArrayList<>();
         for (Backlog backlog : backlogs) {
             BacklogDto backlogDto = BacklogDto.fromEntity(backlog);

@@ -20,17 +20,9 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
 
-    private final UserProjectService userProjectService;
-
     private final UserService userService;
 
-    @Transactional
-    public Long save(String userNickName, ProjectDto projectDto) {
-        User user = userService.findUserByNickName(userNickName);
-        Project project = projectRepository.save(projectDto.toEntity());
-        userProjectService.save(UserProject.builder().project(project).user(user).build());
-        return project.getId();
-    }
+
 
     @Transactional
     public ProjectState getState(Long projectId) {
@@ -47,5 +39,10 @@ public class ProjectService {
     public void changeState(Long projectId, ProjectState projectState) {
         Project project = findById(projectId);
         project.changeState(projectState);
+    }
+
+
+    public Project save(Project project) {
+        return projectRepository.save(project);
     }
 }

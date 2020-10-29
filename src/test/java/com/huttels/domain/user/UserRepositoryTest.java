@@ -17,8 +17,8 @@ import java.sql.SQLException;
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
-//@DataJpaTest
-@SpringBootTest
+@DataJpaTest
+//@SpringBootTest
 public class UserRepositoryTest {
 
     @Autowired
@@ -56,7 +56,7 @@ public class UserRepositoryTest {
     public void create(){
         User user = new User("lck","123");
         User newUser = userRepository.save(user);
-        assertEquals(newUser.getId(),"lck");
+        assertEquals(newUser.getNickName(),"lck");
     }
 
     @Test
@@ -64,7 +64,7 @@ public class UserRepositoryTest {
         User user = new User("lck","123");
         User newUser = userRepository.save(user);
         User foundUser = userRepository.findByNickName("lck");
-        assertEquals(foundUser.getId(),"lck");
+        assertEquals(foundUser.getNickName(),"lck");
     }
 
 }
