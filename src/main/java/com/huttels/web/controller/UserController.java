@@ -62,4 +62,15 @@ public class UserController {
         return "redirect:/projects";
     }
 
+    @GetMapping("/users/logout")
+    public String logout(HttpServletRequest httpServletRequest) {
+        HttpSession httpSession = httpServletRequest.getSession();
+        if (userService.checkLogin(httpSession)) {
+            userService.logout(httpSession);
+        }
+
+
+        return "redirect:/";
+    }
+
 }

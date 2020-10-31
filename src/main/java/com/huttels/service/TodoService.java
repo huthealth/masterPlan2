@@ -6,6 +6,7 @@ import com.huttels.domain.Todo.Todo;
 import com.huttels.domain.Todo.TodoRepository;
 import com.huttels.domain.Todo.TodoState;
 import com.huttels.domain.project.ProjectState;
+import com.huttels.web.dto.BacklogDto;
 import com.huttels.web.dto.TodoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -124,5 +125,29 @@ public class TodoService {
             break;
         }
         return leftDay;
+    }
+
+    @Transactional
+    public void reviewTodos(Long projectId) {
+        List<Backlog> doingBacklogList =  backlogService.findDoingStateBackLog(projectId);
+        int totalBacklogCount = doingBacklogList.size();
+        int countComplete = 0;
+        for(Backlog backlog : doingBacklogList) {
+            long backlogId = backlog.getId();
+            List<Todo> todoList = todoRepository.findByBacklogId(backlogId);
+            boolean isComplete = true;
+            for(Todo todo : todoList ) {
+                if(todo.getState() != TodoState.DONE) {
+                    isComplete = false;
+                }
+                todo.changeState(TodoState.DELETE);
+            }
+            if(isComplete) {
+                backlog.changeState(BacklogState.DONE);
+            }
+            else{
+                backlog.changeState(BacklogState.TODO);
+            }
+        }
     }
 }

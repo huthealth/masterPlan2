@@ -68,17 +68,16 @@
                                         <br><br>
                                         <tr>
                                             <th>백로그</th>
-                                            <th>백로그id</th>
-                                            <th>체크</th>
+                                            <th>백로그ID</th>
                                         </tr>
                                         <tr th:each="backlog : ${backlogs}">
                                             <td th:text="${backlog.getTitle()}"></td>
                                             <td th:text="${backlog.getId()}"></td>
-                                            <td>
+                                            <!--<td>
                                                 <input th:name="checkBox" th:value="${backlog.getId()}"
                                                        class="checkBox" style="font-size: 20px"
                                                        type="checkbox">
-                                            </td>
+                                            </td>-->
                                         </tr>
                                     </table>
                                     <table onload="MoveFocus();" frame="void"
@@ -90,7 +89,7 @@
                                                 <div class="mdi mdi-18px mdi-check btn-icon-prepend"></div>
                                             </td>
                                             <td>
-                                                <input name="bId" type="text" placeholder="backlogId" style="background-color:transparent; border: 0 solid black; width: 100px;"/>
+                                                <input name="bId" type="text" placeholder="백로그ID" style="background-color:transparent; border: 0 solid black; width: 100px;"/>
                                             </td>
                                             <td><input name="todo" type='text' placeholder="todo를 입력하세요" onload="MoveFocus();" autofocus
                                                        class="text-dark font-weight-bold"
@@ -160,7 +159,7 @@
             })
 
 
-            var size = $("input[name='checkBox']:checked").length;
+            /*var size = $("input[name='checkBox']:checked").length;
             var array2 = new Array(size);
             $("input[name='checkBox']:checked").each(function (i) {
                 var checkBox = $(this);
@@ -169,7 +168,7 @@
                 //var backid = td.eq(1).val();
                 array2[i] = checkBox.val();
                 //alert(array2[i]);
-            });
+            });*/
             //alert(array2);
 
             var obj = {

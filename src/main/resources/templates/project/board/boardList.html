@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>board</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="/vendors/base/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <link rel="stylesheet" href="/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="/images/mpSmallLogo.jpg"/>
+</head>
+
+<body>
+<div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <div th:replace="/project/fragments/menu :: menu"></div>
+        <!-- partial -->
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="container">
+                    <h2>게시글 목록</h2>
+                    <div class="row">
+                        <div class="col-md-12 stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <table class="table table_bordered" style="text-align: center;">
+                                        <colgroup>
+                                            <col width="15%"/>
+                                            <col width="*"/>
+                                            <col width="20%"/>
+                                            <col width="20%"/>
+                                        </colgroup>
+                                        <thead>
+                                        <tr>
+                                            <th scope="col"><h4>글번호</h4></th>
+                                            <th scope="col"><h4>제목</h4></th>
+                                            <th scope="col"><h4>작성일</h4></th>
+                                            <th scope="col"><h4>수정일</h4></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:if="${#lists.size(boardDtoList)} > 0" th:each="board : ${boardDtoList}">
+                                            <td th:text="${boardStat.index}"></td>
+                                            <td class="title"><a th:href="@{/project/{projectId}/boards/{boardId}(projectId=${projectId},boardId=${board.getId()})}"><p th:text="${board.getTitle()}"></p></a></td>
+                                            <td th:text="${board.getCreatedDate()}"></td>
+                                            <td th:text="${board.getModifiedDate()}"></td>
+                                        </tr>
+                                        <tr th:unless="${#lists.size(boardDtoList)} > 0">
+                                            <td colspan="4">조회된 결과가 없습니다.</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <<a th:href="@{/projects/{projectId}/boards/write(projectId=${projectId})}" class="btn">글 쓰기</a>
+                                </div></div></div></div></div>
+            </div>
+        </div>
+        <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+    <!-- container-scroller -->
+
+    <!-- plugins:js -->
+    <script src="/vendors/base/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page-->
+    <script src="/vendors/chart.js/Chart.min.js"></script>
+    <script src="/vendors/datatables.net/jquery.dataTables.js"></script>
+    <script src="/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+    <!-- End plugin js for this page-->
+    <!-- inject:js -->
+    <script src="/js/off-canvas.js"></script>
+    <script src="/js/hoverable-collapse.js"></script>
+    <script src="/js/template.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <script src="/js/dashboard.js"></script>
+    <script src="/js/data-table.js"></script>
+    <script src="/js/jquery.dataTables.js"></script>
+    <script src="/js/dataTables.bootstrap4.js"></script>
+    <!-- End custom js for this page-->
+</body>
+
+</html>
+

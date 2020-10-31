@@ -34,7 +34,7 @@
                         <form method="post" th:object="${user}" th:action="@{/projects/{projectId}/addUser(projectId=${projectId})}" class="m-t" role="form">
                             <table>
                                 <tr>
-                                    <td>아이디</td>
+                                    <td>아이디: </td>
                                     <td th:text=" ${user.getNickName()}" ></td>
                                     <input th:type="hidden" th:field="*{nickName}" th:value="${user.getNickName()}"/>
                                 </tr>
@@ -42,6 +42,8 @@
                             </table>
                             <button style="height: 30px; width: 70px;" th:type="submit">추가</button>
                         </form>
+                        <button style="height: 30px; width: 70px;" onclick="location.href='/projects'">취소</button>
+
                     </div>
                 </div>
             </div>

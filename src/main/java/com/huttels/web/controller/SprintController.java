@@ -30,7 +30,7 @@ public class SprintController {
     private final TodoService todoService;
 
     @GetMapping("/projects/{projectId}/sprint")
-    public String sprint(@PathVariable Long projectId, Model model, HttpServletRequest httpServletRequest){
+    public String openSprint(@PathVariable Long projectId, Model model, HttpServletRequest httpServletRequest){
         HttpSession httpSession = httpServletRequest.getSession();
         if(!userService.checkLogin(httpSession)) return "redirect:/users/loginForm";
         String userNickName = userService.getNickName(httpSession);
@@ -57,7 +57,7 @@ public class SprintController {
 
 
     @GetMapping("/projects/{projectId}/sprint/backlog")
-    public String backlog(@PathVariable("projectId") Long projectId, Model model,HttpServletRequest httpServletRequest ){
+    public String openBacklog(@PathVariable("projectId") Long projectId, Model model,HttpServletRequest httpServletRequest ){
         HttpSession httpSession = httpServletRequest.getSession();
         if(!userService.checkLogin(httpSession)) return "redirect:/users/loginForm";
         String userNickName = userService.getNickName(httpSession);
@@ -71,7 +71,7 @@ public class SprintController {
     }
 
     @GetMapping("/projects/{projectId}/sprint/todo")
-    public String todo(@PathVariable("projectId") Long projectId, Model model,HttpServletRequest httpServletRequest ){
+    public String openTodo(@PathVariable("projectId") Long projectId, Model model,HttpServletRequest httpServletRequest ){
         HttpSession httpSession = httpServletRequest.getSession();
         if(!userService.checkLogin(httpSession)) return "redirect:/users/loginForm";
         String userNickName = userService.getNickName(httpSession);
@@ -87,7 +87,7 @@ public class SprintController {
     }
 
     @GetMapping("/projects/{projectId}/sprint/scrumBoard")
-    public String scrumBoard(@PathVariable("projectId") Long projectId, Model model,HttpServletRequest httpServletRequest ) {
+    public String openScrumBoard(@PathVariable("projectId") Long projectId, Model model,HttpServletRequest httpServletRequest ) {
         HttpSession httpSession = httpServletRequest.getSession();
         if (!userService.checkLogin(httpSession)) return "redirect:/users/loginForm";
         String userNickName = userService.getNickName(httpSession);
@@ -122,7 +122,7 @@ public class SprintController {
 
 
     @GetMapping("/projects/{projectId}/sprint/scrumBoard/done")
-    public String scrumBoardToReview(@PathVariable("projectId") Long projectId, Model model,HttpServletRequest httpServletRequest ) {
+    public String changeProjectStateFromScrumBoardToReview(@PathVariable("projectId") Long projectId, Model model,HttpServletRequest httpServletRequest ) {
         HttpSession httpSession = httpServletRequest.getSession();
         if (!userService.checkLogin(httpSession)) return "redirect:/users/loginForm";
         String userNickName = userService.getNickName(httpSession);
@@ -133,7 +133,7 @@ public class SprintController {
     }
 
     @GetMapping("/projects/{projectId}/sprint/review")
-    public String review(@PathVariable("projectId") Long projectId, Model model,HttpServletRequest httpServletRequest ) {
+    public String openReview(@PathVariable("projectId") Long projectId, Model model,HttpServletRequest httpServletRequest ) {
         HttpSession httpSession = httpServletRequest.getSession();
         if (!userService.checkLogin(httpSession)) return "redirect:/users/loginForm";
         String userNickName = userService.getNickName(httpSession);
@@ -141,11 +141,13 @@ public class SprintController {
         if (!userProjectService.isMatched(userNickName, projectId)) return "redirect:/projects";
 
         Map<String,List<TodoDto>> todoMap = todoService.findAllByProjectId(projectId);
+        List<BacklogDto> backlogDtos = backlogService.findDoingStateBackLogDto(projectId);
 
         List<TodoDto> todos = todoMap.get("todos");
         List<TodoDto> doings = todoMap.get("doings");
         List<TodoDto> dones = todoMap.get("dones");
 
+        model.addAttribute("backlogDtos",backlogDtos);
         model.addAttribute("backlogProgress", 0);
         model.addAttribute("userName", userNickName);
         model.addAttribute("todos",todos);
@@ -189,6 +191,17 @@ public class SprintController {
     public String saveScrumBoards(@RequestBody Map<String, List<Map<String,String>>> requestData, @PathVariable("projectId") Long projectId) {
         List<Map<String,String>> todos = requestData.get("result");
         todoService.changeAllState(todos);
+        return "스크럼 보드 저장 완료";
+    }
+
+    @PostMapping("/projects/{projectId}/sprint/review")
+    @ResponseBody
+    public String saveReview(@RequestBody Map<String, String> requestData, @PathVariable("projectId") Long projectId) {
+        String review = requestData.get("result");
+        todoService.reviewTodos(projectId);
+        //if() return "스프린트 종료";
+
+        projectService.changeState(projectId, ProjectState.TODO);
         return "스크럼 보드 저장 완료";
     }
 }

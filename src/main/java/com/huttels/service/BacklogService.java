@@ -59,4 +59,19 @@ public class BacklogService {
     public List<Backlog> findAllByProjectId(Long projectId) {
         return backlogRepository.findAll();
     }
+
+    @Transactional
+    public List<BacklogDto> findDoingStateBackLogDto(Long projectId) {
+        List<Backlog> backlogList = backlogRepository.findByStateByProjectId(projectId,BacklogState.DOING);
+        List<BacklogDto> backlogDtoList = new ArrayList<>();
+        for(Backlog backlog : backlogList) {
+                backlogDtoList.add(BacklogDto.fromEntity(backlog));
+        }
+        return backlogDtoList;
+    }
+
+    @Transactional
+    public List<Backlog> findDoingStateBackLog(Long projectId) {
+        return backlogRepository.findByStateByProjectId(projectId,BacklogState.DOING);
+    }
 }

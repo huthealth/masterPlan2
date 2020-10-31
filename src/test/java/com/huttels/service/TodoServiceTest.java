@@ -2,6 +2,7 @@ package com.huttels.service;
 
 import com.huttels.domain.BackLog.Backlog;
 import com.huttels.domain.BackLog.BacklogRepository;
+import com.huttels.domain.BackLog.BacklogState;
 import com.huttels.domain.Todo.Todo;
 import com.huttels.domain.Todo.TodoRepository;
 import com.huttels.domain.Todo.TodoState;
@@ -11,6 +12,7 @@ import com.huttels.domain.user.User;
 import com.huttels.domain.user.UserRepository;
 import com.huttels.domain.userProject.UserProject;
 import com.huttels.domain.userProject.UserProjectRepository;
+import com.huttels.web.dto.TodoDto;
 import com.sun.org.apache.bcel.internal.generic.LXOR;
 import org.assertj.core.api.Assertions;
 import org.junit.After;
@@ -21,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -100,6 +103,60 @@ public class TodoServiceTest {
             System.out.println(todo.getId());
             assertThat(todo.getState()).isEqualTo(TodoState.DONE);
         }
+    }
+
+    @Test
+    public void reviewTodosTest(){
+        Project project = Project.builder().title("project1").content("project1").build();
+
+        projectRepository.save(project);
+
+        Backlog backlog = Backlog.builder().title("backlog1").project(project).build();
+        Backlog backlog2 = Backlog.builder().title("backlog2").project(project).build();
+        Backlog backlog3 = Backlog.builder().title("backlog3").project(project).build();
+        Backlog backlog4 = Backlog.builder().title("backlog4").project(project).build();
+        backlog.changeState(BacklogState.DOING);
+        backlog2.changeState(BacklogState.DOING);
+        backlog3.changeState(BacklogState.DOING);
+
+        backlogRepository.save(backlog);
+        backlogRepository.save(backlog2);
+        backlogRepository.save(backlog3);
+        backlogRepository.save(backlog4);
+
+        Todo todo = Todo.builder().content("todo1").period(5).endDate(LocalDateTime.now()).backlog(backlog).build();
+        Todo todo2 = Todo.builder().content("todo2").period(5).endDate(LocalDateTime.now()).backlog(backlog2).build();
+        Todo todo3 = Todo.builder().content("todo3").period(5).endDate(LocalDateTime.now()).backlog(backlog2).build();
+        Todo todo4 = Todo.builder().content("todo4").period(5).endDate(LocalDateTime.now()).backlog(backlog3).build();
+
+        todo.changeState(TodoState.DONE);
+        todo2.changeState(TodoState.DONE);
+        todo4.changeState(TodoState.DONE);
+
+        todoRepository.save(todo);
+        todoRepository.save(todo2);
+        todoRepository.save(todo3);
+
+        todoService.reviewTodos(project.getId());
+
+        List<Backlog>  doneBacklogs = backlogRepository.findByStateByProjectId(project.getId(), BacklogState.DONE);
+
+        for(Backlog saveBacklog : doneBacklogs){
+            assertThat(saveBacklog.getState()).isEqualTo(BacklogState.DONE);
+            assertThat(saveBacklog.getTitle()).isNotEqualTo("backlog2");
+            System.out.println(saveBacklog.getTitle());
+
+        }
+
+
+        List<Backlog> backlogs = backlogRepository.findByProjectId(project.getId());
+        for(Backlog saveBacklog : backlogs) {
+            List<Todo> todos = todoRepository.findByBacklogId(saveBacklog.getId());
+            for (Todo savedTodo : todos) {
+                assertThat(savedTodo.getState()).isEqualTo(TodoState.DELETE);
+            }
+        }
+
     }
 
 }

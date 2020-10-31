@@ -39,10 +39,16 @@ public class UserService {
         return true;
     }
 
+
+
     public boolean checkLogin(HttpSession httpSession){
         String loginUser = (String)httpSession.getAttribute(USER_SESSION_KEY);
         if(loginUser == null ) return false;
         return true;
+    }
+
+    public void logout(HttpSession httpSession) {
+        httpSession.removeAttribute(USER_SESSION_KEY);
     }
 
     public String getNickName(HttpSession httpSession) {
@@ -54,4 +60,5 @@ public class UserService {
     }
 
     public User findUserByNickName(String nickName) {return userRepository.findByNickName(nickName);}
+
 }

@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>게시글 상세 화면</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="/vendors/base/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <link rel="stylesheet" href="/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="/images/mpSmallLogo.jpg"/>
+</head>
+
+<body>
+<div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <div th:replace="/project/fragments/menu :: menu"></div>
+        <!-- partial -->
+
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <div class="container">
+                    <h2>게시글 상세 화면</h2>
+                    <div class="row">
+                        <div class="col-md-12 stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <form id="frm" method="post">
+                                        <table class="table table-bordered">
+                                            <colgroup>
+                                                <col width="15%"/>
+                                                <col width="35%"/>
+                                                <col width="35%"/>
+                                                <col width="35%"/>
+                                            </colgroup>
+                                            <tbody>
+                                            <tr>
+                                                <th scope="row">글 번호</th>
+                                                <td th:text="${boardDto.getId() }"></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">작성자</th>
+                                                <td id="creatorId" th:value="${boardDto.getCreatorId()}" th:text="${boardDto.getCreatorId() }"></td>
+                                                <th scope="row">작성일</th>
+                                                <td th:text="${boardDto.getCreatedDate() }"></td>
+                                                <th scope="row">수정일</th>
+                                                <td th:text="${boardDto.getModifiedDate() }"></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">제목</th>
+                                                <td colspan="8"><input type="text" style="width:350px;" id="title" name="title" th:value="${boardDto.title }" readonly/></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">내용</th>
+                                                <td colspan="8" class="view_text">
+                                                    <textarea title="내용" id="contents"  style="width:400px; height:300px;" name="contents" th:text="${boardDto.contents }" readonly></textarea>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <input type="hidden" id="boardId" name="_boardId" th:value="${boardDto.getId() }">
+                                        <input type="hidden" id="projectId" name="_projectId" th:value="${projectId}">
+                                        <input type="hidden" id="method" name="_method"/>
+                                        <input th:type="hidden" id="loginUser" name="_loginUser" th:value="${loginUser}">
+                                    </form>
+
+                                    <a href="#this" id="edit" class="btn">수정하기</a>
+                                    <a href="#this" id="delete" class="btn">삭제하기</a>
+                                    <a href="#this" id="list" class="btn">돌아가기</a>
+
+                                </div>
+
+                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+                                <script type="text/javascript">
+                                    $(document).ready(function(){
+                                        var boardId = $("#boardId").val();
+                                        var projectId = $("#projectId").val();
+                                        var loginUser = $("#loginUser").val();
+                                        var boardCreatorId = $("#creatorId").val();
+
+                                        $("#list").on("click", function(){
+                                            location.href = "/projects/"+projectId+"/boards/";
+                                        });
+
+                                        $("#edit").on("click", function(){
+                                            //$("#method").val("get");
+
+                                            //var frm = $("#frm")[0];
+                                            if(loginUser === boardCreatorId) {
+                                                location.href = "/projects/" + projectId + "/boards/" + boardId + "/update/";
+                                            }
+                                            else {
+                                                console.log("작성자만 수정할 수 있습니다.")
+                                            }
+                                            //frm.submit();
+                                        });
+
+                                        $("#delete").on("click", function(){
+                                            //$("#method").val("get");
+
+                                            //var frm = $("#frm")[0];
+                                            if(loginUser === boardCreatorId) {
+                                                location.href = "/projects/"+projectId+"/boards/"+boardId+ "/delete/";
+                                            }
+                                            else {
+                                                console.log("작성자만 삭제할 수 있습니다.")
+                                            }
+                                            //frm.submit();
+                                        });
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                        <!-- main-panel ends -->
+                    </div></div></div></div></div></div>
+<!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+
+</body>
+
+<!-- plugins:js -->
+<script src="/vendors/base/vendor.bundle.base.js"></script>
+<!-- endinject -->
+<!-- Plugin js for this page-->
+<script src="/vendors/chart.js/Chart.min.js"></script>
+<script src="/vendors/datatables.net/jquery.dataTables.js"></script>
+<script src="/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+<!-- End plugin js for this page-->
+<!-- inject:js -->
+<script src="/js/off-canvas.js"></script>
+<script src="/js/hoverable-collapse.js"></script>
+<script src="/js/template.js"></script>
+<!-- endinject -->
+<!-- Custom js for this page-->
+<script src="/js/dashboard.js"></script>
+<script src="/js/data-table.js"></script>
+<script src="/js/jquery.dataTables.js"></script>
+<script src="/js/dataTables.bootstrap4.js"></script>
+<!-- End custom js for this page-->
+</body>
+
+</html>
+

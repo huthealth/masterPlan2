@@ -38,11 +38,11 @@
                         <span class="nav-profile-name" th:text="${userName}"></span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                        <a class="dropdown-item">
+                        <!--<a class="dropdown-item">
                             <i class="mdi mdi-settings text-primary"></i>
                             Settings
-                        </a>
-                        <a class="dropdown-item">
+                        </a>-->
+                        <a class="dropdown-item" th:href="@{/users/logout}">
                             <i class="mdi mdi-logout text-primary"></i>
                             Logout
                         </a>
@@ -56,7 +56,7 @@
         </div>
     </nav>
     <!-- partial -->
-    <nav class="container-fluid page-body-wrapper">
+    <div class="container-fluid page-body-wrapper">
         <!-- partial:partials/_sidebar.html -->
 
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
@@ -75,17 +75,17 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/project/{projectId}/board(projectidx=${projectId})}">
+                    <a class="nav-link" th:href="@{/projects/{projectId}/boards(projectId=${projectId})}">
                         <i class="mdi mdi-view-headline menu-icon"></i>
                         <span class="menu-title">게시판</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <!--<li class="nav-item">
                     <a class="nav-link" href="schedule">
                         <i class="mdi mdi-calendar menu-icon"></i>
                         <span class="menu-title">프로젝트 관리</span>
                     </a>
-                </li>
+                </li>-->
             </ul>
             <!--
             <div type="hidden"><h>test progress: <input type="text" th:value="${backlog_progress}"> </h></div>
@@ -104,7 +104,6 @@
             <input type="hidden" id="title" th:value="${title}">
             <input type="hidden" id="leader" th:value="${leader}">
         </nav>
-    </nav>
-</nav>
+
 </body>
 </html>
