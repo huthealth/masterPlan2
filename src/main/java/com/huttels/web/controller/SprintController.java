@@ -78,7 +78,7 @@ public class SprintController {
         //프로젝트와 유저가 일치하는지 확인
         if(!userProjectService.isMatched(userNickName,projectId)) return "redirect:/projects";
 
-        List<BacklogDto> backlogDtos = backlogService.findAllDtoByProjectId(projectId);
+        List<BacklogDto> backlogDtos = backlogService.findDoingStateBackLogDto(projectId);
         model.addAttribute("backlogProgress",0);
         model.addAttribute("userName",userNickName);
         model.addAttribute("backlogs",backlogDtos);
@@ -103,7 +103,7 @@ public class SprintController {
         }
 
 
-        Map<String,List<TodoDto>> todoMap = todoService.findAllByProjectId(projectId);
+        Map<String,List<TodoDto>> todoMap = todoService.findTodoByProjectId(projectId);
 
 
         List<TodoDto> todos = todoMap.get("todos");
@@ -140,7 +140,7 @@ public class SprintController {
         //프로젝트와 유저가 일치하는지 확인
         if (!userProjectService.isMatched(userNickName, projectId)) return "redirect:/projects";
 
-        Map<String,List<TodoDto>> todoMap = todoService.findAllByProjectId(projectId);
+        Map<String,List<TodoDto>> todoMap = todoService.findTodoByProjectId(projectId);
         List<BacklogDto> backlogDtos = backlogService.findDoingStateBackLogDto(projectId);
 
         List<TodoDto> todos = todoMap.get("todos");
@@ -198,8 +198,9 @@ public class SprintController {
     @ResponseBody
     public String saveReview(@RequestBody Map<String, String> requestData, @PathVariable("projectId") Long projectId) {
         String review = requestData.get("result");
+        System.out.println(review);
         todoService.reviewTodos(projectId);
-        //if() return "스프린트 종료";
+        if(backlogService.isAllDone(projectId)) return "스프린트 종료";
 
         projectService.changeState(projectId, ProjectState.TODO);
         return "스크럼 보드 저장 완료";

@@ -145,7 +145,6 @@ public class TodoServiceTest {
             assertThat(saveBacklog.getState()).isEqualTo(BacklogState.DONE);
             assertThat(saveBacklog.getTitle()).isNotEqualTo("backlog2");
             System.out.println(saveBacklog.getTitle());
-
         }
 
 

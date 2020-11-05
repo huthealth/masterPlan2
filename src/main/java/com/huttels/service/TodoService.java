@@ -65,15 +65,15 @@ public class TodoService {
     }
 
     @Transactional
-    public Map<String, List<TodoDto>> findAllByProjectId(Long projectId) {
+    public Map<String, List<TodoDto>> findTodoByProjectId(Long projectId) {
         Map<String, List<TodoDto>> todoMap = new HashMap<>();
-        List<Backlog> backlogs = backlogService.findAllByProjectId(projectId);
+        List<Backlog> backlogs = backlogService.findDoingStateBackLog(projectId);
         List<TodoDto> todos = new ArrayList<>();
         List<TodoDto> doings = new ArrayList<>();
         List<TodoDto> dones = new ArrayList<>();
         for(Backlog backlog : backlogs) {
             if(!(backlog.getState() == BacklogState.DOING)) continue;
-            List<Todo> todolist = findAllByBacklogId(backlog.getId());
+            List<Todo> todolist = findNotDeleteStateByBacklogId(backlog.getId());
             for(Todo todo : todolist) {
                 System.out.println("todoId : "+todo.getId() + "todoContent : "+ todo.getContent()+" state : "+todo.getState());
                 TodoState state = todo.getState();
@@ -89,8 +89,8 @@ public class TodoService {
     }
 
     @Transactional
-    public List<Todo> findAllByBacklogId(Long backlogId){
-        return todoRepository.findByBacklogId(backlogId);
+    public List<Todo> findNotDeleteStateByBacklogId(Long backlogId){
+        return todoRepository.findNotDeleteStateByBacklogId(backlogId);
     }
 
     @Transactional
@@ -116,7 +116,7 @@ public class TodoService {
         List<Backlog> backlogs = backlogService.findAllByProjectId(projectId);
         for (Backlog backlog : backlogs) {
             if (!(backlog.getState() == BacklogState.DOING)) continue;
-            List<Todo> todolist = findAllByBacklogId(backlog.getId());
+            List<Todo> todolist = findNotDeleteStateByBacklogId(backlog.getId());
             Todo todo = todolist.get(0);
             LocalDateTime endDay = todo.getEndDate();
             ZoneId seoul = ZoneId.of("Asia/Seoul");

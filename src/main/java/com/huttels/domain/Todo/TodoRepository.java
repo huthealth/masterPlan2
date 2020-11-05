@@ -11,4 +11,6 @@ public interface TodoRepository extends JpaRepository<Todo,Long> {
 
     List<Todo> findByBacklogId(Long backlogId);
 
+    @Query("select t from Todo t where t.backlog.id = :backlogId and t.state <> com.huttels.domain.Todo.TodoState.DELETE ")
+    List<Todo> findNotDeleteStateByBacklogId(Long backlogId);
 }

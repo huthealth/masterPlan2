@@ -50,7 +50,7 @@
                                         <tbody>
                                         <tr th:if="${#lists.size(boardDtoList)} > 0" th:each="board : ${boardDtoList}">
                                             <td th:text="${boardStat.index}"></td>
-                                            <td class="title"><a th:href="@{/project/{projectId}/boards/{boardId}(projectId=${projectId},boardId=${board.getId()})}"><p th:text="${board.getTitle()}"></p></a></td>
+                                            <td class="title"><a th:href="@{/projects/{projectId}/boards/{boardId}(projectId=${projectId},boardId=${board.getId()})}"><p th:text="${board.getTitle()}"></p></a></td>
                                             <td th:text="${board.getCreatedDate()}"></td>
                                             <td th:text="${board.getModifiedDate()}"></td>
                                         </tr>

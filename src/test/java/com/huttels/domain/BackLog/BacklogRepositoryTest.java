@@ -44,8 +44,8 @@ public class BacklogRepositoryTest {
         Backlog backlog3 = Backlog.builder().title("backlog3").project(project2).build();
         Backlog backlog4 = Backlog.builder().title("backlog4").project(project).build();
         backlog.changeState(BacklogState.DOING);
-        backlog2.changeState(BacklogState.DOING);
-        backlog3.changeState(BacklogState.DOING);
+        backlog2.changeState(BacklogState.DONE);
+        //backlog3.changeState(BacklogState.DOING);
 
         backlogRepository.save(backlog);
         backlogRepository.save(backlog2);
@@ -59,7 +59,7 @@ public class BacklogRepositoryTest {
 
         List<Backlog> doingStateBacklogs = backlogRepository.findByStateByProjectId(project.getId(),BacklogState.DOING);
 
-        assertThat(doingStateBacklogs.size()).isEqualTo(2);
+        assertThat(doingStateBacklogs.size()).isEqualTo(1);
         for(Backlog foundBacklog : doingStateBacklogs) {
             assertThat(foundBacklog.getState()).isEqualTo(BacklogState.DOING);
         }

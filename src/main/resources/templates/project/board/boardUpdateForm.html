@@ -33,7 +33,7 @@
                     <div class="col-md-12 stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <form id="frm" method="post">
+                                <form id="frm" method="post" th:object="${boardDto}">
                                     <table class="table table-bordered">
                                         <colgroup>
                                             <col width="15%"/>
@@ -42,13 +42,13 @@
                                             <col width="35%"/>
                                         </colgroup>
                                         <tbody>
-                                        <tr>
+                                       <!-- <tr>
                                             <th scope="row">글 번호</th>
                                             <td th:text="${boardDto.getId() }"></td>
-                                        </tr>
+                                        </tr>-->
                                         <tr>
                                             <th scope="row">작성자</th>
-                                            <td id="creatorId" th:value="${boardDto.getCreatorId()}" th:text="${boardDto.getCreatorId() }"></td>
+                                            <td th:text="${boardDto.getCreatorId() }"></td>
                                             <th scope="row">작성일</th>
                                             <td th:text="${boardDto.getCreatedDate() }"></td>
                                             <th scope="row">수정일</th>
@@ -56,12 +56,12 @@
                                         </tr>
                                         <tr>
                                             <th scope="row">제목</th>
-                                            <td colspan="8"><input type="text" style="width:350px;" id="title" name="title" th:value="${boardDto.title }" readonly/></td>
+                                            <td colspan="8"><input type="text" style="width:350px;" id="title" name="title" th:value="${boardDto.title }" th:field="*{title}" /></td>
                                         </tr>
                                         <tr>
                                             <th scope="row">내용</th>
                                             <td colspan="8" class="view_text">
-                                                <textarea title="내용" id="contents"  style="width:400px; height:300px;" name="contents" th:text="${boardDto.contents }" readonly></textarea>
+                                                <textarea title="내용" id="contents"  style="width:400px; height:300px;" name="contents" th:text="${boardDto.contents }" th:field="*{contents}"></textarea>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -70,6 +70,9 @@
                                     <input type="hidden" id="projectId" name="_projectId" th:value="${projectId}">
                                     <input type="hidden" id="method" name="_method"/>
                                     <input th:type="hidden" id="loginUser" name="_loginUser" th:value="${loginUser}">
+                                    <input th:type="hidden" th:id="creatorId" th:name="_creatorId" th:value="${boardDto.getCreatorId()}">
+                                    <input th:type="hidden" th:field="*{id}" th:value="${boardDto.getId()}"/>
+
                                 </form>
 
                                 <a href="#this" id="edit" class="btn">수정하기</a>
@@ -90,7 +93,7 @@
                                     });
 
                                     $("#edit").on("click", function(){
-                                        $("#method").val("put");
+                                        $("#method").val("post");
 
                                         if(loginUser === boardCreatorId) {
                                             var frm = $("#frm")[0];
@@ -98,7 +101,8 @@
                                             frm.action = "/projects/" + projectId + "/boards/" + boardId + "/update/";
                                         }
                                         else {
-                                            console.log("작성자만 수정할 수 있습니다.")
+                                            alert("작성자만 수정할 수 있습니다." + " 현재 유저 : "+ loginUser + " 작성자 : "+boardCreatorId)
+
                                         }
                                     });
 

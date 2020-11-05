@@ -74,4 +74,13 @@ public class BacklogService {
     public List<Backlog> findDoingStateBackLog(Long projectId) {
         return backlogRepository.findByStateByProjectId(projectId,BacklogState.DOING);
     }
+
+    @Transactional
+    public boolean isAllDone(Long projectId) {
+        List<Backlog> backlogs = findAllByProjectId(projectId);
+        for( Backlog backlog : backlogs){
+            if(!backlog.getState().equals(BacklogState.DONE)) return false;
+        }
+        return true;
+    }
 }

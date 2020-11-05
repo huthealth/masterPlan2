@@ -42,13 +42,13 @@
                                                 <col width="35%"/>
                                             </colgroup>
                                             <tbody>
-                                            <tr>
-                                                <th scope="row">글 번호</th>
-                                                <td th:text="${boardDto.getId() }"></td>
-                                            </tr>
+                                            <!--<tr>
+                                               &lt;!&ndash; <th scope="row">글 번호</th>
+                                                <td th:text="${boardDto.getId() }"></td>&ndash;&gt;
+                                            </tr>-->
                                             <tr>
                                                 <th scope="row">작성자</th>
-                                                <td id="creatorId" th:value="${boardDto.getCreatorId()}" th:text="${boardDto.getCreatorId() }"></td>
+                                                <td th:text="${boardDto.getCreatorId() }"></td>
                                                 <th scope="row">작성일</th>
                                                 <td th:text="${boardDto.getCreatedDate() }"></td>
                                                 <th scope="row">수정일</th>
@@ -70,6 +70,7 @@
                                         <input type="hidden" id="projectId" name="_projectId" th:value="${projectId}">
                                         <input type="hidden" id="method" name="_method"/>
                                         <input th:type="hidden" id="loginUser" name="_loginUser" th:value="${loginUser}">
+                                        <input th:type="hidden" th:id="creatorId" th:name="_creatorId" th:value="${boardDto.getCreatorId()}">
                                     </form>
 
                                     <a href="#this" id="edit" class="btn">수정하기</a>
@@ -98,7 +99,7 @@
                                                 location.href = "/projects/" + projectId + "/boards/" + boardId + "/update/";
                                             }
                                             else {
-                                                console.log("작성자만 수정할 수 있습니다.")
+                                                alert("작성자만 수정할 수 있습니다." + "현재 유저 : "+ loginUser + "작성자 : "+boardCreatorId)
                                             }
                                             //frm.submit();
                                         });
@@ -111,7 +112,7 @@
                                                 location.href = "/projects/"+projectId+"/boards/"+boardId+ "/delete/";
                                             }
                                             else {
-                                                console.log("작성자만 삭제할 수 있습니다.")
+                                                alert("작성자만 삭제할 수 있습니다." + "현재 유저 : "+ loginUser + "작성자 : "+boardCreatorId)
                                             }
                                             //frm.submit();
                                         });

@@ -41,7 +41,7 @@ public class ProjectService {
         project.changeState(projectState);
     }
 
-
+    @Transactional
     public Project save(Project project) {
         return projectRepository.save(project);
     }

@@ -74,7 +74,7 @@
 
                                     <tbody>
                                     <tr th:each="backlog : ${backlogDtos}">
-                                        <td th:text="${backlog.getTitle}"></td>
+                                        <td th:text="${backlog.title}"></td>
                                         <!--<td>
                                             <input th:name="checkBox" th:value="${backlog.getId}"
                                                    class="checkBox"
@@ -157,13 +157,11 @@
             });*/
 
             var comment = $("#contents").val();
-            var textAry = [];
-            textAry.push(comment);
-            alert(comment);
-            alert(textAry);
+            //alert(comment);
+            //alert(textAry);
             var obj = {
                // resultBacklogDone:backlogDone,
-                resultText:textAry
+                result:comment
             }
 
             alert(JSON.stringify(obj));

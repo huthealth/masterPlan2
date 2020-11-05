@@ -83,4 +83,25 @@ public class TodoRepositoryTest {
 
     }
 
+    @Test
+    public void findNotDeleteStateTest(){
+        User user = User.builder().nickName("billy104").password("123123").build();
+        userRepository.save(user);
+        Project project = Project.builder().title("project").build();
+        projectRepository.save(project);
+        UserProject userProject = UserProject.builder().project(project).user(user).build();
+        userProjectRepository.save(userProject);
+        Backlog backlog = Backlog.builder().project(project).title("backlog").build();
+        backlogRepository.save(backlog);
+        Long backlogId = backlog.getId();
+        Todo todo1 = Todo.builder().backlog(backlog).period(5).content("todo1").build();
+        Todo todo2 = Todo.builder().backlog(backlog).period(5).content("todo2").build();
+        todo2.changeState(TodoState.DELETE);
+        Todo todo3 = todoRepository.save(todo1);
+        Todo todo4 = todoRepository.save(todo2);
+
+        List<Todo> todos = todoRepository.findNotDeleteStateByBacklogId(backlogId);
+        assertThat(todos.size()).isEqualTo(1);
+    }
+
 }
